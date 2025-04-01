@@ -1037,7 +1037,7 @@
         for (let i = 0; i < 2; i++) {
             const leaf = document.createElement('div');
             leaf.className = 'lily-leaf';
-            leaf.style.left = `${20 + (i * 20)}px`;
+            leaf.style.left = `${-6 + (i * 20)}px`;
             leaf.style.top = `${80 + (i * 10)}px`;
             leaf.style.transform = `rotate(${i === 0 ? -30 : 30}deg)`;
             lily.appendChild(leaf);
@@ -1089,7 +1089,7 @@
         
         setTimeout(() => {
             message.remove();
-        }, 3000);
+        }, 5000);
     }
 
     // Make lilies grow on click
