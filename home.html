@@ -469,6 +469,144 @@
                     transform: rotate(15deg);
                 }
             </style>
+    <style>
+      /* Lily Container */
+      .lily {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            pointer-events: none;
+            z-index: 100;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            transform-origin: bottom center;
+            animation: 
+                growLily 1.5s ease-out forwards,
+                gentleSway 8s ease-in-out infinite;
+        }
+
+        /* Lily Petals */
+        .lily-petal {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform-origin: center;
+        }
+
+        /* Create 6 petals in a circle */
+        .lily-petal:nth-child(1) { transform: rotate(0deg); }
+        .lily-petal:nth-child(2) { transform: rotate(60deg); }
+        .lily-petal:nth-child(3) { transform: rotate(120deg); }
+        .lily-petal:nth-child(4) { transform: rotate(180deg); }
+        .lily-petal:nth-child(5) { transform: rotate(240deg); }
+        .lily-petal:nth-child(6) { transform: rotate(300deg); }
+
+        /* Lily Center */
+        .lily-center {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, #FFD700 30%, #FF6347 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            box-shadow: 0 0 5px rgba(255,215,0,0.5);
+        }
+
+        /* Lily Stem */
+        .lily-stem {
+            position: absolute;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, #3A5F0B, #6B8E23);
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            animation: growStem 1.2s ease-out forwards;
+        }
+
+        /* Lily Leaves */
+        .lily-leaf {
+            position: absolute;
+            width: 40px;
+            height: 15px;
+            background: #6B8E23;
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        /* Pollen Particles */
+        .pollen-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 101;
+            animation: 
+                pollenFloat 2s ease-out forwards,
+                pollenFade 2s ease-out forwards;
+        }
+
+        /* Floating Message */
+        .floating-message {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #333;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: floatUp 3s ease-out forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes growLily {
+            0% { transform: scale(0.2); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes growStem {
+            to { height: 150px; }
+        }
+
+        @keyframes gentleSway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        @keyframes petalShine {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+
+        @keyframes pollenFloat {
+            to { 
+                transform: 
+                    translate(
+                        calc(var(--distance) * cos(var(--angle))), 
+                        calc(var(--distance) * sin(var(--angle)) * -1)
+                    ); 
+            }
+        }
+
+        @keyframes pollenFade {
+            to { opacity: 0; }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
     <h1>Our Little Collection</h1>
@@ -507,6 +645,15 @@
                 <p>You have this magical way of turning ordinary days into keepsakes I treasure. Thank you for being exactly who you are.</p>
                 <p>Always yours,</p>
                 <p>Me</p>
+            </div>
+        </div>
+
+        <div class="memory" style="transform: rotate(-2deg);">
+            <div class="sticker" style="top: -15px; right: -15px;">🌷</div>
+            <h2>For You</h2>
+            <p>Click anywhere to grow lilies, just like how my love for you grows every day.</p>
+            <div class="lily-garden-instruction">
+            <p><small>Psst... try clicking around the page!</small></p>
             </div>
         </div>
         
@@ -586,6 +733,9 @@
             <p style="text-align: center; margin-top: 10px;">Until our next anniversary!</p>
             <p style="text-align: center; margin-top: 10px;">(We're not together yet so ignore this)</p>
         </div>
+
+
+
     </div>
     
     <footer>
@@ -819,5 +969,148 @@
                 window.location.href = 'index.html';
             }
         </script>
+
+
+        
+<script>
+    // Lily colors (white with pink accents by default)
+    const lilyColors = [
+        { petal: "#ffffff", edge: "#ffb6c1" }, // classic pink-edged
+        { petal: "#fff0f5", edge: "#ff69b4" }, // hot pink
+        { petal: "#f8f8ff", edge: "#dda0dd" }, // lavender
+        { petal: "#fffff0", edge: "#ffa07a" }  // soft coral
+    ];
+
+    let lilyCount = 0;
+    const lilyMessages = [
+        "One lily for your beautiful smile",
+        "Two lilies for your kind heart",
+        "A garden of lilies for all the love you give",
+        "You deserve infinite lilies"
+    ];
+
+    function createLily(x, y) {
+        const lily = document.createElement('div');
+        lily.className = 'lily';
+        lily.style.left = `${x - 40}px`;
+        lily.style.top = `${y - 40}px`;
+        
+        // Random color variation
+        const color = lilyColors[Math.floor(Math.random() * lilyColors.length)];
+        
+        // Create petals (6 petals for a full lily)
+        for (let i = 0; i < 6; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'lily-petal';
+            
+            // Create SVG path for petal
+            const svgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            svgPath.setAttribute("d", "M50 10 Q60 0 70 10 Q85 25 75 45 Q65 65 50 75 Q35 65 25 45 Q15 25 30 10 Q40 0 50 10 Z");
+            svgPath.setAttribute("fill", color.petal);
+            svgPath.setAttribute("stroke", color.edge);
+            svgPath.setAttribute("stroke-width", "1.5");
+            
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewBox", "0 0 100 100");
+            svg.appendChild(svgPath);
+            
+            // Convert SVG to data URL
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgUrl = `data:image/svg+xml;base64,${btoa(svgData)}`;
+            
+            petal.style.backgroundImage = `url('${svgUrl}')`;
+            petal.style.animation = `petalShine ${2 + Math.random()}s ease-in-out infinite`;
+            lily.appendChild(petal);
+        }
+        
+        // Create center
+        const center = document.createElement('div');
+        center.className = 'lily-center';
+        lily.appendChild(center);
+        
+        // Create stem
+        const stem = document.createElement('div');
+        stem.className = 'lily-stem';
+        lily.appendChild(stem);
+        
+        // Create leaves (2 leaves)
+        for (let i = 0; i < 2; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'lily-leaf';
+            leaf.style.left = `${20 + (i * 20)}px`;
+            leaf.style.top = `${80 + (i * 10)}px`;
+            leaf.style.transform = `rotate(${i === 0 ? -30 : 30}deg)`;
+            lily.appendChild(leaf);
+        }
+        
+        document.body.appendChild(lily);
+        
+        // Gentle fade out after 15 seconds
+        setTimeout(() => {
+            lily.style.transition = 'opacity 2s ease';
+            lily.style.opacity = '0';
+            setTimeout(() => lily.remove(), 2000);
+        }, 15000);
+        
+        // Add pollen particles after 1 second
+        setTimeout(() => createPollen(x, y), 1000);
+        
+        // Lily count messages
+        lilyCount++;
+        if (lilyCount === 1 || lilyCount === 2 || lilyCount === 5 || lilyCount === 10) {
+            showFloatingMessage(lilyMessages[Math.min(lilyCount - 1, lilyMessages.length - 1)], x, y);
+        }
+    }
+
+    function createPollen(x, y) {
+        const colors = ['#FFD700', '#FFA500', '#FF6347', '#FFFFFF'];
+        for (let i = 0; i < 8; i++) {
+            const pollen = document.createElement('div');
+            pollen.className = 'pollen-particle';
+            pollen.style.left = `${x}px`;
+            pollen.style.top = `${y}px`;
+            pollen.style.background = colors[Math.floor(Math.random() * colors.length)];
+            pollen.style.setProperty('--distance', `${Math.random() * 60 + 20}px`);
+            pollen.style.setProperty('--angle', `${Math.random() * 360}deg`);
+            pollen.style.animationDelay = `${i * 0.1}s`;
+            document.body.appendChild(pollen);
+            
+            setTimeout(() => pollen.remove(), 3000);
+        }
+    }
+
+    function showFloatingMessage(text, x, y) {
+        const message = document.createElement('div');
+        message.className = 'floating-message';
+        message.textContent = text;
+        message.style.left = `${x}px`;
+        message.style.top = `${y - 50}px`;
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            message.remove();
+        }, 3000);
+    }
+
+    // Make lilies grow on click
+    document.addEventListener('click', (e) => {
+        // Don't create lilies if clicking interactive elements
+        if (!e.target.closest('button, a, input, textarea')) {
+            createLily(e.clientX, e.clientY);
+        }
+    });
+
+    // Add initial lilies on load
+    window.addEventListener('load', () => {
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+                createLily(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight
+                );
+            }, i * 800);
+        }
+    });
+</script>
 </body>
 </html>
