@@ -30,6 +30,8 @@
         }
         
         body {
+            opacity: 0;
+            transition: opacity 0.9s ease;
             font-family: 'Montserrat', sans-serif;
             background-color: var(--paper);
             color: var(--ink);
@@ -432,6 +434,41 @@
                 color: var(--muted);
             }
             </style>
+            <style>
+                .logout-container {
+                    text-align: center;
+                    margin: 40px 0;
+                }
+
+                .logout-btn {
+                    background: rgba(255, 107, 107, 0.1);
+                    color: var(--accent);
+                    border: 1px solid var(--accent);
+                    padding: 10px 25px;
+                    border-radius: 50px;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .logout-btn:hover {
+                    background: rgba(255, 107, 107, 0.2);
+                    transform: translateY(-2px);
+                }
+
+                .logout-icon {
+                    font-size: 1.1rem;
+                    transition: transform 0.3s;
+                }
+
+                .logout-btn:hover .logout-icon {
+                    transform: rotate(15deg);
+                }
+            </style>
 </head>
 <body>
     <h1>Our Little Collection</h1>
@@ -553,8 +590,12 @@
     
     <footer>
         <p>This collection grows more precious every day • Made with love</p>
+        <div class="logout-container">
+            <button class="logout-btn" onclick="logout()">
+                <span class="logout-icon">🔒</span> Lock the Memories
+            </button>
+        </div>
     </footer>
-    <button onclick="logout()">Logout</button>
     
     <script>
         const facts = [
@@ -731,8 +772,41 @@
         </script>
         <script>
             function logout() {
-                localStorage.removeItem('passwordUnloacked');
-                window.location.href = 'index.html'; // Redirect back to the password page
+                // Create a full-screen overlay
+                const overlay = document.createElement('div');
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+                overlay.style.backgroundColor = 'var(--paper)';
+                overlay.style.zIndex = '1000';
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.6s ease';
+                document.body.appendChild(overlay);
+                
+                // Fade in the overlay
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                }, 10);
+                
+                // After animation completes
+                setTimeout(() => {
+                    // Clear the authentication flag
+                    localStorage.removeItem('passwordUnloacked');
+                    
+                    // Redirect
+                    window.location.href = 'index.html';
+                }, 600);
+            }
+        </script>
+        <script>
+            // Check if coming from password page
+            if (localStorage.getItem('passwordUnloacked')) {
+                document.body.style.opacity = '1';
+            } else {
+                // If not authenticated, redirect back
+                window.location.href = 'index.html';
             }
         </script>
 </body>

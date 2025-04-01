@@ -16,6 +16,8 @@
         }
         
         body {
+            transition: opacity 0.6s ease;
+            opacity: 1;
             font-family: 'Montserrat', sans-serif;
             background-color: var(--paper);
             color: var(--ink);
@@ -173,6 +175,14 @@
                 opacity: 0;
             }
         }
+        .clue-text {
+            font-size: 1rem;
+            color: var(--highlight); /* You can use a softer color, or make it a light shade of the accent color */
+            font-style: italic;
+            margin-top: 10px;
+            opacity: 0.7; /* Makes the clue look less prominent */
+        }
+
     </style>
 </head>
 <body>
@@ -183,7 +193,8 @@
         <h1>For Your Eyes Only</h1>
         <p>This memory collection is password protected with a very special question...</p>
         
-        <div class="question">What's the name of our song?</div>
+        <div class="question">What's my favorite hobby?</div>
+        <div class="clue-text">Hint: I'm a nerd in this!</div>
         
         <input type="text" id="password-input" placeholder="Your answer...">
         <div id="error-message" class="error-message"></div>
@@ -227,20 +238,20 @@
             setInterval(createHearts, 15000);
         }
         
-        // Password check
         function checkPassword() {
-            const correctAnswers = ["our song name", "alternative name", "another variant"]; // Replace with your actual answers
+            const correctAnswers = ["reading", "gaming", "me"];
             const userInput = document.getElementById('password-input').value.trim().toLowerCase();
             const errorElement = document.getElementById('error-message');
             
             if (correctAnswers.includes(userInput)) {
+                // Create fade-out effect
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '0';
+                
                 // Store the flag in localStorage
                 localStorage.setItem('passwordUnloacked', 'true');
                 
-                // Redirect to home.html
-                window.location.href = 'home.html'; 
-                
-                // Create celebration effect (optional)
+                // Create celebration effect
                 for (let i = 0; i < 50; i++) {
                     setTimeout(() => {
                         const heart = document.createElement('div');
@@ -258,13 +269,17 @@
                         }, parseFloat(heart.style.animationDuration) * 1000);
                     }, i * 100);
                 }
+                
+                // Redirect after fade-out completes
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 800); // Match this with the transition duration
             } else {
-                // Wrong answer
+                // Wrong answer handling (existing code)
                 errorElement.textContent = "Hmm, that doesn't sound quite right... try again!";
                 document.getElementById('password-input').style.borderColor = "var(--accent)";
                 document.getElementById('password-input').value = "";
                 
-                // Shake animation
                 document.getElementById('lock-screen').style.animation = "shake 0.5s";
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.animation = "";
