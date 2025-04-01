@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Memory Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        // Check if the user has unlocked the page
+        if (!localStorage.getItem('passwordUnloacked')) {
+            window.location.href = 'index.html'; // Redirect to password page if not unlocked
+        }
+    </script>
+    <style>
+        :root {
+            --paper: #FFF9F0;
+            --tape: rgba(255,255,255,0.4);
+            --ink: #3A2D32;
+            --accent: #FF6B6B;
+            --highlight: #FFD166;
+            --muted: #A5A5A5;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--paper);
+            color: var(--ink);
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .scrapbook {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .memory {
+            background: white;
+            padding: 25px;
+            border-radius: 3px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .memory::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            width: 60px;
+            height: 30px;
+            background: var(--tape);
+            transform: rotate(5deg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .memory:hover {
+            transform: translateY(-5px) rotate(1deg);
+        }
+        
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3.5rem;
+            color: var(--ink);
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-color: var(--highlight);
+            opacity: 0.5;
+            z-index: -1;
+            transform: rotate(-1deg);
+        }
+        
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: var(--highlight);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .music-note {
+            font-size: 1.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            margin: 0 2px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .polaroid {
+            background: white;
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transform: rotate(-2deg);
+            margin: 20px auto;
+            max-width: 250px;
+            position: relative;
+        }
+        
+        .polaroid::after {
+            content: "";
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: var(--muted);
+            opacity: 0.3;
+        }
+        
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.2) contrast(1.1);
+        }
+        
+        .polaroid-caption {
+            text-align: center;
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: var(--ink);
+        }
+        
+        .spotify-embed {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: rotate(1deg);
+        }
+        
+        .letter {
+            position: relative;
+            padding: 25px;
+            background: linear-gradient(to bottom, #fff8f8, #ffffff);
+            border-radius: 3px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .letter::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/notebook.png');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .fact-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+            margin: 10px 0;
+            align-self: center;
+        }
+        
+        .fact-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+        
+        #factDisplay {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 3px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 3px solid var(--highlight);
+            display: none;
+            position: relative;
+        }
+        
+        #factDisplay::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 4rem;
+            color: rgba(0,0,0,0.05);
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        footer {
+            text-align: center;
+            margin: 50px 0 20px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--muted);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .scrapbook {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+            
+        /* Sticker elements */
+        .sticker {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            z-index: 10;
+        }
+        
+        /* Hand-drawn border for some memories */
+        .drawn-border {
+            position: relative;
+        }
+        
+        .drawn-border::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed var(--accent);
+            border-radius: 5px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .subtitle {
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px; 
+            margin: 0 auto;
+        }
+
+        /* Floating Hearts */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 107, 107, 0.6);
+            animation: float-heart linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float-heart {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+
+
+        .tree-container {
+            position: relative;
+            height: 200px;
+            margin: 20px 0;
+        }
+        .tree {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 120px solid #8B4513;
+        }
+        .blossoms {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .blossom {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            opacity: 0.7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            transform-origin: center;
+            animation: sway 3s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-45deg) translateY(0); }
+            50% { transform: rotate(-45deg) translateY(-5px); }
+        }
+    </style>
+    <style>
+        .bottle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .bottle {
+            width: 100px;
+            height: 150px;
+            background: rgba(0, 150, 200, 0.2);
+            border-radius: 30px 30px 5px 5px;
+            border: 2px solid rgba(0, 100, 150, 0.5);
+            position: relative;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .bottle:hover {
+            transform: scale(1.1);
+        }
+        .bottle-neck {
+            width: 30px;
+            height: 50px;
+            background: rgba(0, 150, 200, 0.3);
+            border-radius: 5px 5px 0 0;
+            border: 2px solid rgba(0, 100, 150, 0.5);
+            position: absolute;
+            top: -50px;
+            left: 35px;
+        }
+        .message {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Caveat', cursive;
+            color: var(--ink);
+        }
+        </style>
+        <style>
+            .countdown-container {
+                display: flex;
+                justify-content: space-around;
+                margin: 20px 0;
+            }
+            .countdown-box {
+                text-align: center;
+            }
+            .countdown-box div:first-child {
+                font-size: 2rem;
+                font-weight: bold;
+                color: var(--accent);
+            }
+            .countdown-label {
+                font-size: 0.8rem;
+                color: var(--muted);
+            }
+            </style>
+</head>
+<body>
+    <h1>Our Little Collection</h1>
+    <p class="subtitle">A little space on the internet created just for you, filled with warmth and appreciation</p>
+    <div class="scrapbook">
+        <!-- Welcome Memory -->
+        <div class="memory" style="transform: rotate(-1deg);">
+            <div class="sticker" style="top: -15px; right: -15px; transform: rotate(15deg);">✨</div>
+            <h2>Welcome</h2>
+            <p>This is our personal scrapbook - a collection of moments, feelings, and memories that celebrate you.</p>
+            <p>Each piece here is like a page in our story, carefully arranged just for you to revisit whenever you need.</p>
+            <div class="polaroid">
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Open book">
+                <div class="polaroid-caption">Our story</div>
+            </div>
+        </div>
+        
+        <!-- Music Memory -->
+        <div class="memory" style="transform: rotate(2deg);">
+            <div class="sticker" style="top: 10px; left: -10px; transform: rotate(-10deg);">🎵</div>
+            <h2>Our Soundtrack</h2>
+            <p>These are the melodies that paint the background of our story:</p>
+            <div class="spotify-embed">
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6R5v0KIfRk66zHG7C4JspV?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <p>Every note feels special when I imagine you listening too.</p>
+        </div>
+        
+        <!-- Letter Memory -->
+        <div class="memory drawn-border" style="transform: rotate(-2deg);">
+            <div class="sticker" style="bottom: -15px; right: -15px; transform: rotate(5deg);">💌</div>
+            <h2>A Letter</h2>
+            <div class="letter">
+                <p>My dear,</p>
+                <p>If memories were flowers, I'd gather every blossom we've created together into the most beautiful bouquet.</p>
+                <p>You have this magical way of turning ordinary days into keepsakes I treasure. Thank you for being exactly who you are.</p>
+                <p>Always yours,</p>
+                <p>Me</p>
+            </div>
+        </div>
+        
+        <!-- Fun Facts Memory -->
+        <div class="memory" style="transform: rotate(1deg);">
+            <div class="sticker" style="top: -15px; left: 20px; transform: rotate(-5deg);">🔍</div>
+            <h2>Little Discoveries</h2>
+            <p>Click below to uncover something wonderful about you:</p>
+            <button class="fact-btn" onclick="showFact()">Reveal a Secret</button>
+            <div id="factDisplay"></div>
+        </div>
+        
+        <!-- Photo Memory -->
+        <div class="memory" style="transform: rotate(-3deg);">
+            <div class="sticker" style="bottom: 10px; left: -15px; transform: rotate(-15deg);">📷</div>
+            <h2>A Moment Captured</h2>
+            <div class="polaroid">
+                <img src="https://unsplash.com/photos/sunset-over-the-horizon-xP_AGmeEa6s" alt="Sunset">
+                <div class="polaroid-caption">How I see you</div>
+            </div>
+            <p>Some moments are too precious to let fade. This is how I'll always remember you - radiant and full of light.</p>
+        </div>
+        
+        <!-- Quote Memory -->
+        <div class="memory" style="transform: rotate(2deg);">
+            <div class="sticker" style="top: -10px; right: 10px; transform: rotate(10deg);">💫</div>
+            <h2>Words to Keep</h2>
+            <p style="font-style: italic; position: relative; padding-left: 20px;">
+                <span style="position: absolute; left: 0; font-size: 2rem; line-height: 1; color: var(--muted);">"</span>
+                You are not a drop in the ocean. You are the entire ocean in a drop.
+                <span style="font-size: 2rem; line-height: 1; color: var(--muted); position: relative; top: 10px;">"</span>
+            </p>
+            <p style="text-align: right; color: var(--muted); margin-top: 10px;">— Rumi</p>
+            <p style="margin-top: 20px;">This is how you make me feel - like an entire universe contained in one beautiful soul.</p>
+        </div>
+
+        <div class="memory" style="transform: rotate(2deg);">
+            <div class="sticker" style="bottom: -15px; right: -15px; transform: rotate(5deg);">🌳</div>
+            <h2>Reasons You're Wonderful</h2>
+            <div class="tree-container">
+                <div class="tree"></div>
+                <div class="blossoms" id="blossoms"></div>
+            </div>
+            <button class="fact-btn" onclick="addBlossom()">Add a Reason</button>
+        </div>
+        <div class="memory" style="transform: rotate(-3deg);">
+            <div class="sticker" style="bottom: 10px; left: -15px; transform: rotate(-15deg);">🏷️</div>
+            <h2>Message in a Bottle</h2>
+            <div class="bottle-container">
+                <div class="bottle" onclick="openBottle()">
+                    <div class="bottle-neck"></div>
+                    <div class="message">Click to open</div>
+                </div>
+            </div>
+        </div>
+        <div class="memory" style="transform: rotate(1deg);">
+            <div class="sticker" style="top: -15px; left: 20px; transform: rotate(-5deg);">⏳</div>
+            <h2>Countdown to Us</h2>
+            <div class="countdown-container">
+                <div class="countdown-box">
+                    <div id="days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 10px;">Until our next anniversary!</p>
+            <p style="text-align: center; margin-top: 10px;">(We're not together yet so ignore this)</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>This collection grows more precious every day • Made with love</p>
+    </footer>
+    <button onclick="logout()">Logout</button>
+    
+    <script>
+        const facts = [
+            "Your smile has its own unique frequency that brightens the world.",
+            "You have this incredible talent for making people feel truly seen.",
+            "The way your mind works is like watching magic unfold.",
+            "Your resilience in tough times is quietly awe-inspiring.",
+            "You possess a rare combination of strength and tenderness.",
+            "Your laugh should be bottled as a happiness elixir.",
+            "You have an artist's soul, whether you realize it or not.",
+            "The world is objectively better because you're in it.",
+            "Your kindness creates ripples that reach further than you know.",
+            "You're growing into yourself so beautifully - it's an honor to witness.",
+            "Your thoughtfulness shows in the smallest gestures that mean the most.",
+            "You have this brilliant mind that comes up with the most wonderful ideas.",
+            "Simply being you is more than enough - you don't need to prove anything.",
+            "You have a gift for understanding people in a way few others do.",
+            "Your presence is like a warm blanket on a cold day."
+        ];
+        
+        function showFact() {
+            const factDisplay = document.getElementById('factDisplay');
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            
+            factDisplay.style.display = "block";
+            factDisplay.innerHTML = randomFact;
+            
+            // Add a random sticker to the fact
+            const stickers = ['✨', '💖', '🌟', '🌼', '🍀', '🎀', '🧡'];
+            const randomSticker = stickers[Math.floor(Math.random() * stickers.length)];
+            
+            factDisplay.innerHTML += `<div class="sticker" style="bottom: -10px; right: -10px; transform: rotate(${Math.random() * 30 - 15}deg);">${randomSticker}</div>`;
+        }
+        
+        // Add random rotation to memories on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const memories = document.querySelectorAll('.memory');
+            memories.forEach(memory => {
+                const rotation = Math.random() * 6 - 3; // Random between -3 and 3 degrees
+                memory.style.transform = `rotate(${rotation}deg)`;
+            });
+        });
+
+        // Create floating hearts
+        function createHearts() {
+            const heartsContainer = document.createElement('div');
+            heartsContainer.className = 'hearts';
+            document.body.appendChild(heartsContainer);
+            
+            const heartColors = [
+                'rgba(255, 107, 107, 0.6)',  // --accent
+                'rgba(255, 209, 102, 0.6)',  // --highlight
+                'rgba(255, 138, 138, 0.6)',
+                'rgba(255, 166, 166, 0.6)'
+            ];
+            
+            // Create 15 hearts
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = Math.random() * 100 + 'vh';
+                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                    heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                    heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                    heartsContainer.appendChild(heart);
+                    
+                    // Remove heart after animation completes
+                    setTimeout(() => {
+                        heart.remove();
+                    }, parseFloat(heart.style.animationDuration) * 1000);
+                }, i * 1000);
+            }
+            
+            // Keep creating new hearts
+            setInterval(createHearts, 15000);
+        }
+
+        // Start the hearts when page loads
+        document.addEventListener('DOMContentLoaded', createHearts);
+
+        
+    </script>
+    <script>
+        const reasons = [
+            "Your kindness",
+            "Your smile",
+            "Your thoughtfulness",
+            "Your humor",
+            "Your resilience",
+            "Your generosity",
+            "Your compassion",
+            "Your strength",
+            "Your creativity",
+            "Your warmth",
+            "Your determination",
+            "Your patience",
+            "Your wisdom",
+            "Your honesty",
+            "Your empathy",
+            "Your spirit",
+            "Your positivity"
+        ];
+
+        
+        function addBlossom() {
+            const reason = prompt("Add another reason why they're wonderful:");
+            if (reason) {
+                reasons.push(reason);
+                createBlossoms();
+            }
+        }
+        
+        function createBlossoms() {
+            const container = document.getElementById('blossoms');
+            container.innerHTML = '';
+            reasons.forEach((reason, i) => {
+                const blossom = document.createElement('div');
+                blossom.className = 'blossom';
+                blossom.textContent = '❤';
+                blossom.style.left = `${20 + Math.random() * 60}%`;
+                blossom.style.top = `${20 + Math.random() * 60}%`;
+                blossom.style.animationDelay = `${Math.random() * 2}s`;
+                blossom.title = reason;
+                container.appendChild(blossom);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', createBlossoms);
+        </script>
+
+    <script>
+        const bottleMessages = [
+            "You're my favorite notification",
+            "I'd choose you in every lifetime",
+            "You make my heart skip beats",
+            "Your smile is my favorite emoji",
+            "I fall for you more every day"
+        ];
+        
+        function openBottle() {
+            const randomMessage = bottleMessages[Math.floor(Math.random() * bottleMessages.length)];
+            document.querySelector('.message').textContent = randomMessage;
+            document.querySelector('.bottle').style.backgroundColor = 'rgba(0, 200, 150, 0.3)';
+            setTimeout(() => {
+                document.querySelector('.bottle').style.backgroundColor = 'rgba(0, 150, 200, 0.2)';
+            }, 3000);
+        }
+    </script>
+    <script>
+        // Set your anniversary date (YYYY, MM-1, DD)
+        const anniversary = new Date(2024, 11, 25); // December 25, 2024
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = anniversary - now;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Update every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        </script>
+        <script>
+            function logout() {
+                localStorage.removeItem('passwordUnloacked');
+                window.location.href = 'index.html'; // Redirect back to the password page
+            }
+        </script>
+</body>
+</html>
