@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Corner of the Internet for You</title>
+    <style>
+        /* Pastel color palette */
+        :root {
+            --pink: #ffd6e0;
+            --mint: #c1f2e9;
+            --lavender: #e2d4f0;
+            --peach: #ffdfd3;
+            --powder: #d4e4f7;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--pink);
+            color: #555;
+        }
+        
+        header {
+            background-color: var(--lavender);
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 3px dotted var(--peach);
+        }
+        
+        h1 {
+            color: #7a6a95;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        
+        .heart {
+            color: #ff6b8b;
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #7a6a95;
+            border-bottom: 2px dashed var(--mint);
+            padding-bottom: 10px;
+        }
+        
+        /* Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+        
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid var(--peach);
+            transition: transform 0.3s;
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Playlist and Fun Fact Grid */
+        .playlist, .fun-fact {
+            display: grid;
+            place-items: center;
+            text-align: center;
+        }
+
+        .playlist {
+            background-color: var(--powder);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .letter {
+            background-color: var(--mint);
+            padding: 20px;
+            border-radius: 10px;
+            font-style: italic;
+        }
+        
+        .fun-fact {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background-color: #ff9eb5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #ff6b8b;
+        }
+        
+        #factDisplay {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7a6a95;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .gallery img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>A Little Corner of the Internet <span class="heart">💖</span><br>Just For You</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section id="welcome">
+            <h2>Welcome</h2>
+            <p>Hello there! This is a special little space I made just for you. It's not much, but I wanted to create something that might make you smile. Take your time exploring, and know that you're appreciated.</p>
+            <p>Whenever you need a little pick-me-up, this corner of the internet will always be here for you.</p>
+        </section>
+        
+        <section id="gallery">
+            <h2>Our Happy Moments</h2>
+            <div class="gallery">
+                <!-- Replace these with your actual images -->
+                <img src="https://placekitten.com/200/200" alt="Cute placeholder">
+                <img src="https://placekitten.com/201/200" alt="Cute placeholder">
+                <img src="https://placekitten.com/200/201" alt="Cute placeholder">
+                <img src="https://placekitten.com/202/200" alt="Cute placeholder">
+            </div>
+            <p style="text-align: center; margin-top: 15px;">These are some of my favorite memories with you ❤️</p>
+        </section>
+        
+        <section id="music">
+            <h2>Songs That Remind Me of You</h2>
+            <div class="playlist">
+                <!-- Replace with your actual Spotify embed code -->
+                <p>Here's a playlist of songs that make me think of you:</p>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6R5v0KIfRk66zHG7C4JspV?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <p>Music sounds sweeter when I imagine you listening with me.</p>
+            </div>
+        </section>
+        
+        <section id="letter">
+            <h2>A Little Letter</h2>
+            <div class="letter">
+                <p>Dear You,</p>
+                <p>I wanted to take a moment to tell you how much you mean to me. Your smile brightens my day, your laugh is my favorite sound, and your presence makes everything better.</p>
+                <p>I admire your [qualities you appreciate about them], and I'm so grateful to have you in my life. Whether we're having deep conversations or comfortable silences, every moment with you is special.</p>
+                <p>Thank you for being you.</p>
+                <p>With all my heart,</p>
+                <p>Me</p>
+            </div>
+        </section>
+        
+        <section id="fun-facts">
+            <h2>Fun Facts About You</h2>
+            <div class="fun-fact">
+                <button onclick="showFact()">Click for a Sweet Fact</button>
+                <div id="factDisplay"></div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Made with love, just for you.</p>
+    </footer>
+    
+    <script>
+        const facts = [
+            "You have the most beautiful smile that lights up any room.",
+            "Your laugh is contagious and always makes me happy.",
+            "You're incredibly thoughtful and always know how to make people feel special.",
+            "You have a unique way of seeing the world that inspires me.",
+            "Your kindness touches everyone around you.",
+            "You're stronger than you think and braver than you believe.",
+            "You make ordinary moments feel extraordinary.",
+            "Your creativity never ceases to amaze me.",
+            "You have a heart of gold and it shows in everything you do.",
+            "Simply being around you makes my day better."
+        ];
+        
+        function showFact() {
+            const factDisplay = document.getElementById('factDisplay');
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            
+            factDisplay.style.display = "block";
+            factDisplay.innerHTML = `<p>"${randomFact}"</p>`;
+        }
+    </script>
+</body>
+</html>
