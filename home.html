@@ -644,37 +644,47 @@
             const heartsContainer = document.createElement('div');
             heartsContainer.className = 'hearts';
             document.body.appendChild(heartsContainer);
-            
+
             const heartColors = [
                 'rgba(255, 107, 107, 0.6)',  // --accent
                 'rgba(255, 209, 102, 0.6)',  // --highlight
                 'rgba(255, 138, 138, 0.6)',
                 'rgba(255, 166, 166, 0.6)'
             ];
-            
-            // Create 15 hearts
-            for (let i = 0; i < 15; i++) {
+
+            // Function to create a single heart
+            function createSingleHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                heartsContainer.appendChild(heart);
+
+                // Remove heart after animation completes
                 setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'heart';
-                    heart.innerHTML = '❤';
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.top = Math.random() * 100 + 'vh';
-                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                    heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
-                    heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                    heartsContainer.appendChild(heart);
-                    
-                    // Remove heart after animation completes
-                    setTimeout(() => {
-                        heart.remove();
-                    }, parseFloat(heart.style.animationDuration) * 1000);
-                }, i * 1000);
+                    heart.remove();
+                }, parseFloat(heart.style.animationDuration) * 1000);
             }
-            
-            // Keep creating new hearts
-            setInterval(createHearts, 15000);
+
+            // Initially create 20 hearts
+            for (let i = 0; i < 20; i++) {
+                createSingleHeart();
+            }
+
+            // Keep creating new hearts while maintaining a max of 20 on screen
+            setInterval(() => {
+                if (heartsContainer.childElementCount < 20) {
+                    createSingleHeart();
+                }
+            }, 500);  // Check every 500ms to add a heart if needed
         }
+
+        createHearts();
+
 
         // Start the hearts when page loads
         document.addEventListener('DOMContentLoaded', createHearts);

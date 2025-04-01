@@ -207,18 +207,21 @@
     </div>
     
     <script>
-        // Floating hearts creation (same as before)
-        function createHearts() {
-            const heartsContainer = document.getElementById('hearts');
-            const heartColors = [
-                'rgba(255, 107, 107, 0.6)',
-                'rgba(255, 209, 102, 0.6)',
-                'rgba(255, 138, 138, 0.6)',
-                'rgba(255, 166, 166, 0.6)'
-            ];
-            
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
+            // Create floating hearts
+            function createHearts() {
+                const heartsContainer = document.createElement('div');
+                heartsContainer.className = 'hearts';
+                document.body.appendChild(heartsContainer);
+
+                const heartColors = [
+                    'rgba(255, 107, 107, 0.6)',  // --accent
+                    'rgba(255, 209, 102, 0.6)',  // --highlight
+                    'rgba(255, 138, 138, 0.6)',
+                    'rgba(255, 166, 166, 0.6)'
+                ];
+
+                // Function to create a single heart
+                function createSingleHeart() {
                     const heart = document.createElement('div');
                     heart.className = 'heart';
                     heart.innerHTML = '❤';
@@ -228,15 +231,28 @@
                     heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
                     heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
                     heartsContainer.appendChild(heart);
-                    
+
+                    // Remove heart after animation completes
                     setTimeout(() => {
                         heart.remove();
                     }, parseFloat(heart.style.animationDuration) * 1000);
-                }, i * 1000);
+                }
+
+                // Initially create 20 hearts
+                for (let i = 0; i < 20; i++) {
+                    createSingleHeart();
+                }
+
+                // Keep creating new hearts while maintaining a max of 20 on screen
+                setInterval(() => {
+                    if (heartsContainer.childElementCount < 20) {
+                        createSingleHeart();
+                    }
+                }, 500);  // Check every 500ms to add a heart if needed
             }
-            
-            setInterval(createHearts, 15000);
-        }
+
+            createHearts();
+
         
         function checkPassword() {
             const correctAnswers = ["reading", "gaming", "me"];
