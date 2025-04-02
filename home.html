@@ -141,7 +141,25 @@
             <p style="text-align: center; margin-top: 10px;">Until our next anniversary!</p>
             <p style="text-align: center; margin-top: 10px;">(We're not together yet so ignore this)</p>
         </div>
+
+        <div class="memory" style="transform: rotate(-2deg);">
+            <div class="sticker" style="top: -15px; left: -15px; transform: rotate(-15deg);">✍️</div>
+            <h2>Special Delivery</h2>
+            <div class="letter-container">
+                <button class="fact-btn" onclick="writeLetter()">Open Letter</button>
+                <div id="animatedLetter" class="handwritten-letter"></div>
+            </div>
+        </div>
         
+        <div class="memory" style="transform: rotate(-3deg);">
+            <div class="sticker" style="top: -15px; right: -15px; transform: rotate(15deg);">✨</div>
+            <h2>Messages in the Stars</h2>
+            <div class="constellation-container">
+                <canvas id="constellationCanvas" width="300" height="200"></canvas>
+            </div>
+            <p>Click on stars to reveal secret messages</p>
+            <div id="starMessage" class="star-message"></div>
+        </div>
     </div>
     
     <footer>

@@ -96,7 +96,7 @@ function createHearts() {
     }
 
     // Initially create 20 hearts
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 15; i++) {
         createSingleHeart();
     }
 
@@ -511,3 +511,109 @@ setInterval(() => {
     }
 }, 5000);
 });
+
+
+
+function writeLetter() {
+    const letter = document.getElementById('animatedLetter');
+    letter.style.display = 'block';
+    letter.innerHTML = '';
+    
+    const message = "Every moment we spend talking or laughing feels like a little piece of magic. Your presence brightens my day, and I can’t help but smile whenever I think of you. I’m so grateful for the connection we share, and I truly enjoy getting to know you more with each passing day. I can't wait to see where this journey takes us. \n\n With warm thoughts,";
+    let i = 0;
+    
+    const typingEffect = setInterval(() => {
+        if (i < message.length) {
+            letter.innerHTML += message.charAt(i);
+            i++;
+            letter.scrollTop = letter.scrollHeight;
+        } else {
+            clearInterval(typingEffect);
+        }
+    }, 50);
+}
+
+
+
+
+// Add this to your JavaScript
+function initConstellation() {
+    const canvas = document.getElementById('constellationCanvas');
+    const ctx = canvas.getContext('2d');
+    const messages = [
+        "You shine brighter than any star",
+        "My favorite place is next to you",
+        "You make my universe complete",
+        "You make me so happy",
+        "You are the star that lights up my night",
+        "I love you with all my heart",
+        "I Want to marry you",
+        "Every moment with you is magical"
+    ];
+    
+    // Draw stars
+    const stars = [];
+    for (let i = 0; i < 15; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 1,
+            message: messages[i % messages.length]
+        });
+    }
+    
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connections
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 0.5;
+        
+        for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+                const dist = Math.sqrt(
+                    Math.pow(stars[i].x - stars[j].x, 2) + 
+                    Math.pow(stars[i].y - stars[j].y, 2)
+                );
+                
+                if (dist < 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(stars[i].x, stars[i].y);
+                    ctx.lineTo(stars[j].x, stars[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        // Draw stars
+        stars.forEach(star => {
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
+    
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        stars.forEach(star => {
+            const dist = Math.sqrt(Math.pow(x - star.x, 2) + Math.pow(y - star.y, 2));
+            if (dist < 10) {
+                const messageDiv = document.getElementById('starMessage');
+                messageDiv.textContent = star.message;
+                messageDiv.style.display = 'block';
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
+        });
+    });
+    
+    draw();
+}
+
+// Call this when page loads
+initConstellation();
