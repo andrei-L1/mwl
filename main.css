@@ -702,7 +702,7 @@ to { opacity: 0; }
 }
 
 .star-message {
-    width: 100%;
+    width: 90%;
     background: rgba(10, 10, 32, 0.9);
     color: white;
     padding: 15px;

@@ -541,11 +541,9 @@ function initConstellation() {
     const canvas = document.getElementById('constellationCanvas');
     const ctx = canvas.getContext('2d');
     const messages = [
-        "You shine brighter than any star",
         "My favorite place is next to you",
         "You make my universe complete",
         "You make me so happy",
-        "You are the star that lights up my night",
         "I love you with all my heart",
         "I Want to marry you",
         "Every moment with you is magical"
