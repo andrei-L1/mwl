@@ -689,11 +689,12 @@ to { opacity: 0; }
 .constellation-container {
     margin: 20px auto;
     position: relative;
-    width: 300px;
+    width: auto;
     height: 200px;
 }
 
 #constellationCanvas {
+    width: 100%;
     background: #0a0a20;
     border-radius: 10px;
     display: block;
@@ -701,6 +702,7 @@ to { opacity: 0; }
 }
 
 .star-message {
+    width: 100%;
     background: rgba(10, 10, 32, 0.9);
     color: white;
     padding: 15px;
