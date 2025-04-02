@@ -48,7 +48,44 @@
             gap: 30px;
             padding: 20px;
         }
-        
+        .memory {
+            background: 
+                /* Layered paper texture */
+                url('https://www.transparenttextures.com/patterns/soft-paper.png'),
+                /* Coffee stain effects */
+                url('https://www.transparenttextures.com/patterns/coffee-stains.png') center/30% no-repeat,
+                /* Base color with subtle gradient */
+                linear-gradient(to bottom right, #FFF9F0, #FFF4E5);
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 
+                0 3px 12px rgba(0,0,0,0.08),
+                /* Inner shadow for depth */
+                inset 0 0 30px rgba(0,0,0,0.03);
+            padding: 25px;
+            border-radius: 3px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        .memory::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url('https://www.transparenttextures.com/patterns/aged-paper.png') center/cover;
+            mix-blend-mode: multiply;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+                
+
+/*
         .memory {
             background: white;
             padding: 25px;
@@ -61,7 +98,7 @@
             flex-direction: column;
             border: 1px solid rgba(0,0,0,0.05);
         }
-        
+  */      
         .memory::before {
             content: "";
             position: absolute;
@@ -824,6 +861,30 @@
         
         // Add random rotation to memories on load
         document.addEventListener('DOMContentLoaded', function() {
+
+            // Add this to your DOMContentLoaded script
+            document.querySelectorAll('.memory').forEach(memory => {
+                // Create multiple tape pieces
+                for(let i = 0; i < 2; i++) {
+                    const tape = document.createElement('div');
+                    tape.className = 'tape-piece';
+                    tape.style.cssText = `
+                        position: absolute;
+                        width: ${40 + Math.random() * 30}px;
+                        height: ${15 + Math.random() * 10}px;
+                        background: linear-gradient(to bottom, 
+                            rgba(255,255,255,0.7), 
+                            rgba(255,255,255,0.3));
+                        transform: rotate(${-5 + Math.random() * 10}deg);
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        z-index: 2;
+                        top: ${-8 + Math.random() * 10}px;
+                        ${Math.random() > 0.5 ? 'left' : 'right'}: ${10 + Math.random() * 20}px;
+                    `;
+                    memory.appendChild(tape);
+                }
+            });
+
             const memories = document.querySelectorAll('.memory');
             memories.forEach(memory => {
                 const rotation = Math.random() * 6 - 3; // Random between -3 and 3 degrees
@@ -1243,11 +1304,22 @@
         ).toString(16).slice(1)}`;
     }
 
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('button, a, input, textarea')) {
-            createLily(e.pageX, e.pageY); // Use pageX and pageY instead
-        }
-    });
+        document.addEventListener('click', (e) => {
+        
+            let hasOnClick = e.target.closest('[onclick]');
+
+            const clickableSelectors = [
+                'button', 'a', 'input', 'textarea', 'select', 'label', 
+                'details', 'summary', 'form', 'fieldset', 'option', 'optgroup',
+                'menu', 'menuitem', 'area', 'canvas', 'video', 'audio',
+                '[onclick]'  
+            ];
+
+            if (!hasOnClick && !e.target.closest(clickableSelectors.join(', '))) {
+                createLily(e.pageX, e.pageY);
+            }
+        });
+
 
 
     // Add initial lilies on load
